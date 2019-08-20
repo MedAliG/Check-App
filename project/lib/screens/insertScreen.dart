@@ -9,6 +9,7 @@ import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:Check/objects/database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:Check/screens/displayedPage.dart';
 
 class _DateTimePicker extends StatelessWidget {
   const _DateTimePicker({
@@ -546,7 +547,7 @@ class _InsertInterfaceState extends State<InsertInterface> {
         _errorMsg = "Please make sure to fill both fields";
       });
       return false;
-    }  
+    }
     if (name.text.length > 36) {
       setState(() {
         _error = 1;
@@ -554,7 +555,7 @@ class _InsertInterfaceState extends State<InsertInterface> {
         print(_errorMsg);
       });
       return false;
-    } 
+    }
     if (!(_validAmount(amount.text))) {
       setState(() {
         _error = 1;
@@ -626,7 +627,7 @@ class _InsertInterfaceState extends State<InsertInterface> {
                 _setValidFormat(int.parse(_fromTime.minute.toString()))
       };
       final id = await dbHelper.insert(row);
-      print('inserted row id: $id');
+      print('/***********************************/  inserted row id: $id');
       if (prefsDaily) {
         await _showDailyAtTime(d, id);
       } else {
@@ -681,7 +682,8 @@ class _InsertInterfaceState extends State<InsertInterface> {
         amount.text +
             'DT at ${_toTwoDigitString(time.hour)}:${_toTwoDigitString(time.minute)}:${_toTwoDigitString(time.second)}',
         time,
-        platformChannelSpecifics);
+        platformChannelSpecifics,
+        payload: _id.toString());
   }
 
   Future<void> _scheduleNotification(DateTime _date, int _id) async {
@@ -720,19 +722,26 @@ class _InsertInterfaceState extends State<InsertInterface> {
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.schedule(
-        10,
+        _id,
         name.text,
         amount.text + "DT",
         scheduledNotificationDateTime,
-        platformChannelSpecifics);
+        platformChannelSpecifics,
+        payload: _id.toString());
   }
 
   Future<void> onSelectNotification(String payload) async {
+    print("maybe this one ?");
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
     }
 
-    await Navigator.of(context).pushNamed('/set');
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SecondScreen(id: int.parse(payload)),
+      ),
+    );
   }
 
   String _toTwoDigitString(int value) {
@@ -741,6 +750,7 @@ class _InsertInterfaceState extends State<InsertInterface> {
 
   Future<void> onDidReceiveLocalNotification(
       int id, String title, String body, String payload) async {
+    print("onreceive id " + id.toString());
     // display a dialog with the notification details, tap ok to go to another page
     await showDialog(
       context: context,
@@ -753,7 +763,13 @@ class _InsertInterfaceState extends State<InsertInterface> {
             child: Text('Ok'),
             onPressed: () async {
               Navigator.of(context, rootNavigator: true).pop();
-              await Navigator.of(context).pushNamed('/set');
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SecondScreen(id: id),
+                ),
+              );
+              ;
             },
           )
         ],

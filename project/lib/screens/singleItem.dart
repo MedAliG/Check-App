@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:Check/widgets/bottomNavBarC.dart';
 import 'package:Check/objects/database.dart';
 import 'package:Check/screens/editInterface.dart';

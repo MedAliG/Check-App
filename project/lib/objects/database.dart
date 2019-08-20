@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -60,6 +60,11 @@ class DatabaseHelper {
   Future<int> insert(Map<String, dynamic> row) async {
     Database db = await instance.database;
     return await db.insert(table, row);
+  }
+
+  Future<List<Map<String, dynamic>>> getRow(int id) async {
+    Database db = await instance.database;
+    return await db.rawQuery("SELECT * FROM $table WHERE $columnId = $id");
   }
 
   // All of the rows are returned as a list of maps, where each map is
@@ -125,7 +130,7 @@ class DatabaseHelper {
   }
 
   Future<List> autoUpdateActivity() async {
-    List<int> ll =[];
+    List<int> ll = [];
     DateTime currentDate = DateTime.now();
     Database db = await instance.database;
     final data =
@@ -138,7 +143,7 @@ class DatabaseHelper {
       print("parsed date :" + parsedDate.toIso8601String());
 
       if (currentDate.compareTo(parsedDate) > 0) {
-        print("Row id :"+row["_id"].toString());
+        print("Row id :" + row["_id"].toString());
         ll.add(row["_id"]);
         //print(parsedDate.toIso8601String() + "     " + currentDate.toString());
         return await db.rawUpdate(
