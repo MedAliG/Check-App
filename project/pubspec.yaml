@@ -16,15 +16,21 @@ dependencies:
   intl:
   sqflite:
   flare_flutter:
-
+  
   
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons:
 
   flutter_local_notifications:
     path: ../
 
+
+flutter_icons:
+  android: "launcher_icon" 
+  ios: true
+  image_path: "assets/check.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 

@@ -282,27 +282,32 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
                               SizedBox(
                                 height: height * .02,
                               ),
-                              Container(
-                                margin: EdgeInsets.only(left: width * .025),
-                                height: height * .075,
-                                width: width * .95,
-                                child: Row(
-                                  children: <Widget>[
-                                    Container(
-                                      height: height * .035,
-                                      width: height * .035,
-                                      child: Image(
-                                        image: AssetImage("assets/Infos.png"),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed("/about");
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(left: width * .025),
+                                  height: height * .075,
+                                  width: width * .95,
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        height: height * .035,
+                                        width: height * .035,
+                                        child: Image(
+                                          image: AssetImage("assets/Infos.png"),
+                                        ),
                                       ),
-                                    ),
-                                    Container(
-                                      width: width * .02,
-                                    ),
-                                    Text(
-                                      "App. Informations",
-                                      style: TextStyle(fontFamily: "Robo"),
-                                    ),
-                                  ],
+                                      Container(
+                                        width: width * .02,
+                                      ),
+                                      Text(
+                                        "App. Informations",
+                                        style: TextStyle(fontFamily: "Robo"),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               GestureDetector(
@@ -358,76 +363,82 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
         height: height,
         width: width,
         color: Colors.black54.withOpacity(0.5),
-        child: Center(
-          child: Container(
-            height: height * .18,
-            width: width * .75,
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  "Are you sure you want to delete all data.",
-                  style: TextStyle(color: Colors.black54, fontSize: 18),
-                ),
-                SizedBox(
-                  height: height * .02,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Center(
+              child: Container(
+                //height: height * .18,
+                width: width * .75,
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                    color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                child: Column(
                   children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _state = 0;
-                        });
-                      },
-                      child: Container(
-                        height: height * .05,
-                        width: width * .3,
-                        decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(color: Colors.black45, blurRadius: 2)
-                            ]),
-                        child: Center(
-                          child: Text(
-                            "Cancel",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                    Text(
+                      "Are you sure you want to delete all data.",
+                      style: TextStyle(color: Colors.black54, fontSize: 18),
+                    ),
+                    SizedBox(
+                      height: height * .02,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _state = 0;
+                            });
+                          },
+                          child: Container(
+                            height: height * .05,
+                            width: width * .3,
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(color: Colors.black45, blurRadius: 2)
+                                ]),
+                            child: Center(
+                              child: Text(
+                                "Cancel",
+                                style: TextStyle(color: Colors.white, fontSize: 20),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        _appReset();
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            "/splash", (Route<dynamic> route) => false);
-                      },
-                      child: Container(
-                        height: height * .05,
-                        width: width * .3,
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(color: Colors.black45, blurRadius: 2)
-                            ]),
-                        child: Center(
-                          child: Text(
-                            "Confirm",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                        GestureDetector(
+                          onTap: () {
+                            _appReset();
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                "/splash", (Route<dynamic> route) => false);
+                          },
+                          child: Container(
+                            height: height * .05,
+                            width: width * .3,
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(color: Colors.black45, blurRadius: 2)
+                                ]),
+                            child: Center(
+                              child: Text(
+                                "Confirm",
+                                style: TextStyle(color: Colors.white, fontSize: 20),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
+                      ],
+                    )
                   ],
-                )
-              ],
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       );
     }

@@ -18,18 +18,18 @@ class _GuideLinesState extends State<GuideLines> {
   static const _kCurve = Curves.ease;
   static final Item x = Item(
       id: 1,
-      title: "Title",
-      details: "Lorem ipsum dolor sit amet, consetetur",
+      title: "ADD",
+      details: "Insert your checks informations & keep them updated.",
       image: "assets/pic1.png");
   static final Item r = Item(
       id: 2,
-      title: "Title",
-      details: "Lorem ipsum dolor sit amet, consetetur",
+      title: "Get Notified",
+      details: "When your deadline is close the app. will notifie you.",
       image: "assets/pic2.png");
   static final Item s = Item(
       id: 3,
-      title: "Title",
-      details: "Lorem ipsum dolor sit amet, consetetur",
+      title: "Keep your self orginized",
+      details: "Keep your checks & data orginized so its easier to keep track of what you got.",
       image: "assets/pic3.png");
   List<Item> list = [x, r, s];
   @override
@@ -201,7 +201,8 @@ class _GuideLinesState extends State<GuideLines> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: height * .15),
+            height: height*.35,
+            margin: EdgeInsets.only(top: height * .10),
             child: Image(
               image: AssetImage(x.image),
             ),

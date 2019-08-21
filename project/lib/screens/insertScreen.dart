@@ -352,9 +352,7 @@ class _InsertInterfaceState extends State<InsertInterface> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: height * .03,
-              ),
+              
               Container(
                 margin:
                     EdgeInsets.only(left: width * .075, right: width * .075),
@@ -422,7 +420,7 @@ class _InsertInterfaceState extends State<InsertInterface> {
               ),
               Container(
                 width: width * .85,
-                margin: EdgeInsets.only(top: height * .08),
+                margin: EdgeInsets.only(top: height * .05),
                 padding:
                     EdgeInsets.only(left: width * .075, right: width * .075),
                 child: Row(

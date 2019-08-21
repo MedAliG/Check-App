@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'screens/notificationSystem.dart';
 import 'screens/splash.dart';
-import 'screens/displayedPage.dart';
 import 'screens/localStorageFuncts.dart';
 import 'screens/home.dart';
+import 'screens/about.dart';
 import 'screens/insertScreen.dart';
 import 'screens/sqtest.dart';
 import 'screens/settingsInterface.dart';
-import 'package:Check/objects/database.dart';
 import 'screens/guideline.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:Check/objects/database.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -77,10 +77,6 @@ class _InternShipState extends State<InternShip> {
     );
   }
 
-  _updateActives() {
-    for (int i = 0; i < l.length; i++) {}
-  }
-
   _initDataStatus() async {
     List<int> r = await dbHelper.autoUpdateActivity();
     setState(() {
@@ -94,14 +90,14 @@ class _InternShipState extends State<InternShip> {
       title: 'Navigation',
       routes: <String, WidgetBuilder>{
         '/notification': (BuildContext context) => NotificationSystem(),
-        '/set': (BuildContext context) => SecondScreen(),
         '/str': (BuildContext context) => LocalStorage(),
         '/home': (BuildContext context) => HomeScreen(),
         '/add': (BuildContext context) => InsertInterface(),
         '/sqt': (BuildContext context) => Sr(),
         '/settings': (BuildContext context) => SettingsInterface(),
         '/guidelines': (BuildContext context) => GuideLines(),
-        '/splash':(BuildContext context) => SplashScreen(),
+        '/splash': (BuildContext context) => SplashScreen(),
+        '/about': (BuildContext context) => AboutUs()
       },
       home: SplashScreen(),
     );

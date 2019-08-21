@@ -190,6 +190,40 @@ class LoadingIndSucc extends StatelessWidget {
   }
 }
 
+class AboutUsBtn extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return GestureDetector(
+      onTap: () {
+        //Navigator.pop(context);
+        Navigator.of(context).pop();
+      },
+      child: Hero(
+        tag: 'add',
+        child: Container(
+          decoration: BoxDecoration(
+              color: Color(0xFF12BB65),
+              shape: BoxShape.circle,
+              boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 5)]),
+          margin: EdgeInsets.only(top: 1),
+          padding: EdgeInsets.all(18),
+          child: Container(
+            height: height * .03,
+            child: Image(
+              image: AssetImage(
+                "assets/x.png",
+              ),
+              height: height * .15,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class CancelBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
