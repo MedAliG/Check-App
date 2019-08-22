@@ -282,62 +282,72 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
                               SizedBox(
                                 height: height * .02,
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed("/about");
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(left: width * .025),
-                                  height: height * .075,
-                                  width: width * .95,
-                                  child: Row(
-                                    children: <Widget>[
-                                      Container(
-                                        height: height * .035,
-                                        width: height * .035,
-                                        child: Image(
-                                          image: AssetImage("assets/Infos.png"),
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed("/about");
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(left: width * .025),
+                                    height: height * .075,
+                                    width: width * .95,
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                          height: height * .035,
+                                          width: height * .035,
+                                          child: Image(
+                                            image:
+                                                AssetImage("assets/Infos.png"),
+                                          ),
                                         ),
-                                      ),
-                                      Container(
-                                        width: width * .02,
-                                      ),
-                                      Text(
-                                        "App. Informations",
-                                        style: TextStyle(fontFamily: "Robo"),
-                                      ),
-                                    ],
+                                        Container(
+                                          width: width * .02,
+                                        ),
+                                        Text(
+                                          "App. Informations",
+                                          style: TextStyle(fontFamily: "Robo"),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  //_appReset();
-                                  setState(() {
-                                    _state = 1;
-                                  });
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(left: width * .025),
-                                  height: height * .075,
-                                  width: width * .95,
-                                  child: Row(
-                                    children: <Widget>[
-                                      Container(
-                                        height: height * .0335,
-                                        width: height * .0335,
-                                        child: Image(
-                                          image: AssetImage("assets/reset.png"),
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    //_appReset();
+                                    setState(() {
+                                      _state = 1;
+                                    });
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                        left: width * .025,
+                                        right: width * .025),
+                                    height: height * .075,
+                                    width: width * .95,
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                          height: height * .0335,
+                                          width: height * .0335,
+                                          child: Image(
+                                            image:
+                                                AssetImage("assets/reset.png"),
+                                          ),
                                         ),
-                                      ),
-                                      Container(
-                                        width: width * .02,
-                                      ),
-                                      Text(
-                                        "App. reset",
-                                        style: TextStyle(fontFamily: "Robo"),
-                                      ),
-                                    ],
+                                        Container(
+                                          width: width * .02,
+                                        ),
+                                        Text(
+                                          "App. reset",
+                                          style: TextStyle(fontFamily: "Robo"),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               )
@@ -363,7 +373,6 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
         height: height,
         width: width,
         color: Colors.black54.withOpacity(0.5),
-        
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -373,7 +382,8 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
                 width: width * .75,
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                    color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10)),
                 child: Column(
                   children: <Widget>[
                     Text(
@@ -399,12 +409,14 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
                                 color: Colors.green,
                                 borderRadius: BorderRadius.circular(15),
                                 boxShadow: [
-                                  BoxShadow(color: Colors.black45, blurRadius: 2)
+                                  BoxShadow(
+                                      color: Colors.black45, blurRadius: 2)
                                 ]),
                             child: Center(
                               child: Text(
                                 "Cancel",
-                                style: TextStyle(color: Colors.white, fontSize: 20),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
                               ),
                             ),
                           ),
@@ -422,12 +434,14 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
                                 color: Colors.red,
                                 borderRadius: BorderRadius.circular(15),
                                 boxShadow: [
-                                  BoxShadow(color: Colors.black45, blurRadius: 2)
+                                  BoxShadow(
+                                      color: Colors.black45, blurRadius: 2)
                                 ]),
                             child: Center(
                               child: Text(
                                 "Confirm",
-                                style: TextStyle(color: Colors.white, fontSize: 20),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
                               ),
                             ),
                           ),

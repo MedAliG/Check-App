@@ -324,13 +324,26 @@ class _InsertInterfaceState extends State<InsertInterface> {
                     EdgeInsets.only(left: width * .075, right: width * .075),
                 child: Column(
                   children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(left: width * .01),
-                      width: width * .9,
-                      child: Text(
-                        "Date & time of delivery",
-                        style: TextStyle(fontFamily: "Robo"),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.only(left: width * .01),
+                          width: width * .4,
+                          child: Text(
+                            "Delivery date",
+                            style: TextStyle(fontFamily: "Robo"),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: width * .01),
+                          width: width * .4,
+                          child: Text(
+                            "Reminder Timer",
+                            style: TextStyle(fontFamily: "Robo"),
+                          ),
+                        ),
+                      ],
                     ),
                     Container(
                       child: _DateTimePicker(
@@ -352,7 +365,6 @@ class _InsertInterfaceState extends State<InsertInterface> {
                   ],
                 ),
               ),
-              
               Container(
                 margin:
                     EdgeInsets.only(left: width * .075, right: width * .075),

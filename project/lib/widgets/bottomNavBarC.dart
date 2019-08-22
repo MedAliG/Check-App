@@ -204,7 +204,7 @@ class AboutUsBtn extends StatelessWidget {
         tag: 'add',
         child: Container(
           decoration: BoxDecoration(
-              color: Color(0xFF12BB65),
+              color: Colors.green,
               shape: BoxShape.circle,
               boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 5)]),
           margin: EdgeInsets.only(top: 1),

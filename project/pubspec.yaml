@@ -16,7 +16,8 @@ dependencies:
   intl:
   sqflite:
   flare_flutter:
-  
+
+
   
 dev_dependencies:
   flutter_test:

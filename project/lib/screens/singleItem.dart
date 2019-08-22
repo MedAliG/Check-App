@@ -20,6 +20,7 @@ class _SingleItemState extends State<SingleItem> {
   String image;
   _SingleItemState(this.x, this.data, this.image);
   int status = 0;
+  bool _cancel = false;
   @override
   void initState() {
     setState(() {
@@ -330,7 +331,17 @@ class _SingleItemState extends State<SingleItem> {
                 _changeStatusBtn(),
               ],
             ),
-          )
+          ),
+          (_cancel)
+              ? Container(
+                  height: height,
+                  width: width,
+                  color: Colors.black.withOpacity(0.6),
+                  child: Center(
+                    child: _floatingBtn(),
+                  ),
+                )
+              : Container()
         ],
       ),
     );
@@ -342,9 +353,8 @@ class _SingleItemState extends State<SingleItem> {
     if (status == 1) {
       return GestureDetector(
         onTap: () {
-          _changeState(data["_id"]);
           setState(() {
-            status = 0;
+            _cancel = true;
           });
         },
         child: Container(
@@ -388,6 +398,81 @@ class _SingleItemState extends State<SingleItem> {
         ),
       );
     }
+  }
+
+  _floatingBtn() {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.only(top: 10, bottom: 10),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(20)),
+      child: Stack(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(10),
+            child: Text(
+              "Are you sure you want to change the state of this activity",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.black87, fontFamily: "Robo", fontSize: 18),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: height * .08),
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _cancel = false;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.lightBlue,
+                        borderRadius: BorderRadius.circular(18)),
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "Robo",
+                          fontSize: 18),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _changeState(data["_id"]);
+                    setState(() {
+                      status = 0;
+                      _cancel = false;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(16)),
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                    child: Text(
+                      "Confirm",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "Robo",
+                          fontSize: 18),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   _activityState() {

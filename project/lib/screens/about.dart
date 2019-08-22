@@ -9,10 +9,8 @@ class AboutUs extends StatefulWidget {
 }
 
 class _AboutUsState extends State<AboutUs> {
-  bool _animation = true;
   @override
   void initState() {
-    _resetAnimation();
     super.initState();
   }
 
@@ -112,17 +110,5 @@ class _AboutUsState extends State<AboutUs> {
         ),
       ),
     );
-  }
-
-  _resetAnimation() {
-    print(_animation);
-    Timer(Duration(seconds: 3), () => changeState());
-    print(_animation);
-  }
-
-  changeState() {
-    setState(() {
-      _animation = false;
-    });
   }
 }
