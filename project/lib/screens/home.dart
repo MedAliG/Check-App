@@ -1,5 +1,4 @@
 import 'dart:core';
-
 import 'package:flutter/material.dart';
 import 'package:Check/widgets/bottomNavBarC.dart';
 import 'package:Check/screens/singleItem.dart';
@@ -14,12 +13,18 @@ class _HomeScreenState extends State<HomeScreen> {
   int _allItemCount = 0;
   int _activeItemCount = 0;
   String _state = "active";
+  int _deleteState = 0;
+  int confirmDelete = 0;
+  int deletable = -1;
+  List<int> allDataIndexes = [];
+  List<int> activeDataIndexes = [];
+  List<int> backupDataAll = [];
   List<Map<String, dynamic>> dataAll = [];
   List<Map<String, dynamic>> dataActive = [];
   @override
   void initState() {
     //_emptyAll();
-    
+
     _initData();
     _itemCount();
 
@@ -33,136 +38,161 @@ class _HomeScreenState extends State<HomeScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor:
+          (_deleteState == 1) ? Color(0xFF4A4A4A) : Color(0xFFFAFAFA),
       bottomNavigationBar: BtmNavBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingBtn(),
       resizeToAvoidBottomPadding: false,
-      body: Container(
-        height: height,
-        width: width,
-        //padding: EdgeInsets.only(top: height*.05),
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(top: height * .015),
-              decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                BoxShadow(color: Colors.black26, blurRadius: 10)
-              ]),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    //height: height * .15,
-                    width: width,
-                    decoration: BoxDecoration(color: Colors.white),
-                    padding:
-                        EdgeInsets.only(top: height * .04, left: width * .075),
-                    child: Text(
-                      "Activities",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: "RoboBold",
-                          fontSize: height * .04),
-                    ),
-                  ),
-                  SizedBox(
-                    height: height * .015,
-                  ),
-                  Container(
-                    width: width,
-                    //decoration: BoxDecoration(color: Colors.red),
-                    child: Row(
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _state = "active";
-                            });
-                          },
-                          child: Container(
-                            width: width * .5,
-                            height: height * .06,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: (_state == "active")
-                                            ? Color(0xFF12BB65)
-                                            : Colors.transparent,
-                                        width: height * .005))),
-                            child: Center(
-                              child: Text(
-                                "Active Events",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "RoboBold",
-                                    fontSize: height * .022),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            color: Color(0xFFFAFAFA),
+            height: height,
+            width: width,
+            //padding: EdgeInsets.only(top: height*.05),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(top: height * .015),
+                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                    BoxShadow(color: Colors.black26, blurRadius: 10)
+                  ]),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        //height: height * .15,
+                        width: width,
+                        decoration: BoxDecoration(color: Colors.white),
+                        padding: EdgeInsets.only(
+                            top: height * .04, left: width * .075),
+                        child: Text(
+                          "Activities",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: "RoboBold",
+                              fontSize: height * .04),
+                        ),
+                      ),
+                      SizedBox(
+                        height: height * .015,
+                      ),
+                      Container(
+                        width: width,
+                        //decoration: BoxDecoration(color: Colors.red),
+                        child: Row(
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _state = "active";
+                                });
+                              },
+                              child: Container(
+                                width: width * .5,
+                                height: height * .06,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: (_state == "active")
+                                                ? Color(0xFF12BB65)
+                                                : Colors.transparent,
+                                            width: height * .005))),
+                                child: Center(
+                                  child: Text(
+                                    "Active Events",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: "RoboBold",
+                                        fontSize: height * .022),
+                                  ),
+                                ),
+                                //padding: EdgeInsets.only(top: 5),
                               ),
                             ),
-                            //padding: EdgeInsets.only(top: 5),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            //_emptyAll();
-                            setState(() {
-                              _state = "all";
-                            });
-                          },
-                          child: Container(
-                            width: width * .5,
-                            height: height * .06,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: (_state == "all")
-                                            ? Color(0xFF12BB65)
-                                            : Colors.transparent,
+                            GestureDetector(
+                              onTap: () {
+                                //_emptyAll();
+                                setState(() {
+                                  _state = "all";
+                                });
+                              },
+                              child: Container(
+                                width: width * .5,
+                                height: height * .06,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: (_state == "all")
+                                                ? Color(0xFF12BB65)
+                                                : Colors.transparent,
 
-                                        //color: Color(0xFF12BB65),
-                                        width: height * .005))),
-                            child: Center(
-                              child: Text(
-                                "All events",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Robo",
-                                    fontSize: height * .022),
+                                            //color: Color(0xFF12BB65),
+                                            width: height * .005))),
+                                child: Center(
+                                  child: Text(
+                                    "All events",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: "Robo",
+                                        fontSize: height * .022),
+                                  ),
+                                ),
+                                //padding: EdgeInsets.only(top: 5),
                               ),
                             ),
-                            //padding: EdgeInsets.only(top: 5),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Container(
+                  padding:
+                      EdgeInsets.only(left: width * .025, right: width * .025),
+                  width: width,
+                  height: height * .7275,
+                  child: (_state == "active")
+                      ? ListView.builder(
+                          itemCount: _activeItemCount,
+                          itemBuilder: (BuildContext context, int index) {
+                            print("\n/****/ supp" + dataAll.length.toString());
+                            return _itemCreate2(index,
+                                dataActive[activeDataIndexes[index]], false);
+                          })
+                      : ListView.builder(
+                          itemCount: _allItemCount,
+                          itemBuilder: (BuildContext context, int index) {
+                            return _itemCreate2(
+                                index, dataAll[allDataIndexes[index]], true);
+                          }),
+                )
+              ],
             ),
-            Container(
-              padding: EdgeInsets.only(left: width * .025, right: width * .025),
-              width: width,
-              height: height * .7275,
-              child: (_state == "active")
-                  ? ListView.builder(
-                      itemCount: _activeItemCount,
-                      itemBuilder: (BuildContext context, int index) {
-                        //return _itemActive(index, m);
-                        return _itemCreate2(index, dataActive[index]);
-                        //print(convertDateToString(m['deliverDate']));
-                      })
-                  : ListView.builder(
-                      itemCount: _allItemCount,
-                      itemBuilder: (BuildContext context, int index) {
-                        return _itemCreate2(index, dataAll[index]);
-
-                        //print(convertDateToString(m['deliverDate']));
-                      }),
-            )
-          ],
-        ),
+          ),
+          _removedInterface(),
+        ],
       ),
     );
+  }
+
+  _removedInterface() {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return (_deleteState == 1)
+        ? Container(
+            height: height,
+            width: width,
+            color: Colors.black54.withOpacity(.7),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                __btnConfrm(0),
+              ],
+            ))
+        : Container();
   }
 
   _itemAll(int x, Map data) {
@@ -451,7 +481,104 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 */
-  _itemCreate2(int x, Map data) {
+
+  __btnConfrm(int x) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return Container(
+      width: width * .7,
+      padding: EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(20)),
+      child: Column(
+        children: <Widget>[
+          Container(
+              child: Text(
+            "Are you sure you want to delete this item ?",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18),
+          )),
+          Container(
+            margin: EdgeInsets.only(top: height * .02),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    _cancelBtn();
+                  },
+                  child: Container(
+                    width: width * .28,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Center(
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(
+                            fontFamily: "RoboBold",
+                            color: Colors.white,
+                            fontSize: width * .05),
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _deleteConfirm();
+                  },
+                  child: Container(
+                    width: width * .28,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Center(
+                      child: Text(
+                        "Confirm",
+                        style: TextStyle(
+                            fontFamily: "RoboBold",
+                            color: Colors.white,
+                            fontSize: width * .05),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  _deleteConfirm() {
+    setState(() {
+      print("stuff");
+      confirmDelete = 1;
+      _deleteState = 0;
+      print("deletable" + deletable.toString());
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil("/home", (Route<dynamic> route) => false);
+    });
+    _removeSelected(deletable);
+  }
+
+  _cancelBtn() {
+    setState(() {
+      _deleteState = 0;
+      print("backup here :");
+      print(backupDataAll);
+      //allDataIndexes = [];
+      allDataIndexes = _copyList(backupDataAll);
+
+      confirmDelete = 0;
+      _allItemCount++;
+    });
+  }
+
+  _itemCreate2(int x, Map data, bool all) {
     List<String> images = [
       "assets/pic2.png",
       "assets/pic3.png",
@@ -459,104 +586,137 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  SingleItem(x: x, data: data, image: images[x % 3])),
-        );
+    return Dismissible(
+      key: Key(UniqueKey().toString()),
+      onDismissed: (direction) {
+        print(x);
+        //backupDataAll = allDataIndexes;
+        if (all) {
+          setState(() {
+            _deleteState = 1;
+            deletable = dataAll[x]["_id"];
+            print("deletable :" + deletable.toString());
+            allDataIndexes.removeAt(x);
+            _allItemCount = allDataIndexes.length;
+
+            //print("removing " + x.toString());
+            //print(dataAll.length);
+            /*for (int i = 0; i < dataAll.length; i++) {
+              print("index : " + i.toString());
+              print(dataAll[i]);
+            }*/
+            //dataAll.removeAt(x);
+
+            //dataAll.removeAt(x);
+            //print("\n after that shit" + dataAll.length.toString());
+          });
+        } else {
+          /*setState(() {
+            dataActive.removeAt(x);
+            dataAll.removeAt(x);
+            print("removed " + x.toString());
+          });*/
+        }
       },
-      child: Container(
-        margin: EdgeInsets.only(
-            top: height * .015,
-            bottom: height * .015,
-            right: width * .01,
-            left: width * .01),
-        height: height * .2,
-        width: width * .88,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(35),
-            boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 4)]),
-        child: Stack(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  width: width * .38,
-                  height: height * .2,
-                ),
-                Hero(
-                  tag: "item" + x.toString(),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: Container(
-                      height: height * .2,
-                      width: width * .5,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(images[x % 3]))),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            Container(
-              height: height * .2,
-              width: width * .88,
-              child: Row(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    SingleItem(x: x, data: data, image: images[x % 3])),
+          );
+        },
+        child: Container(
+          margin: EdgeInsets.only(
+              top: height * .015,
+              bottom: height * .015,
+              right: width * .01,
+              left: width * .01),
+          height: height * .2,
+          width: width * .88,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(35),
+              boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 4)]),
+          child: Stack(
+            children: <Widget>[
+              Row(
                 children: <Widget>[
                   Container(
+                    width: width * .38,
                     height: height * .2,
-                    width: width * .55,
-                    //padding: EdgeInsets.only(top: height * .03, left: width * .1),
-                    //color: Colors.red,
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(
-                              top: height * .04, left: width * .1),
-                          height: height * .09,
-                          width: width * .55,
-                          child: Text(
-                            data["amount"].toString() + " DT",
-                            style:
-                                TextStyle(fontFamily: "RoboBold", fontSize: 25),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: width * .1),
-                          height: height * .035,
-                          width: width * .55,
-                          child: Text(
-                            data["name"],
-                            style: TextStyle(
-                                fontFamily: 'Grenze',
-                                fontSize: 18,
-                                color: Colors.black54),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: width * .1),
-                          height: height * .03,
-                          width: width * .55,
-                          child: Text(
-                            convertDateToString(data['deliverDate']),
-                            style: TextStyle(
-                                fontFamily: 'Grenze',
-                                fontSize: 18,
-                                color: Colors.black54),
-                          ),
-                        )
-                      ],
-                    ),
                   ),
+                  Hero(
+                    tag: "item" + x.toString(),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Container(
+                        height: height * .2,
+                        width: width * .5,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(images[x % 3]))),
+                      ),
+                    ),
+                  )
                 ],
               ),
-            ),
-          ],
+              Container(
+                height: height * .2,
+                width: width * .88,
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      height: height * .2,
+                      width: width * .55,
+                      //padding: EdgeInsets.only(top: height * .03, left: width * .1),
+                      //color: Colors.red,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(
+                                top: height * .04, left: width * .1),
+                            height: height * .09,
+                            width: width * .55,
+                            child: Text(
+                              data["amount"].toString() + " DT",
+                              style: TextStyle(
+                                  fontFamily: "RoboBold", fontSize: 25),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: width * .1),
+                            height: height * .035,
+                            width: width * .55,
+                            child: Text(
+                              data["name"],
+                              style: TextStyle(
+                                  fontFamily: 'Grenze',
+                                  fontSize: 18,
+                                  color: Colors.black54),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: width * .1),
+                            height: height * .03,
+                            width: width * .55,
+                            child: Text(
+                              convertDateToString(data['deliverDate']),
+                              style: TextStyle(
+                                  fontFamily: 'Grenze',
+                                  fontSize: 18,
+                                  color: Colors.black54),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -566,11 +726,18 @@ class _HomeScreenState extends State<HomeScreen> {
     List<Map<String, dynamic>> dataSet = await dbHelper.queryAllRows();
     List<Map<String, dynamic>> dataSet2 = await dbHelper.queryActiveRows();
     print('query all rows:');
-    dataSet.forEach((row) => print(row));
+    int i = 0;
+    int j = 0;
     setState(() {
+      dataSet.forEach((row) => {allDataIndexes.add(i++)});
       dataAll = dataSet;
+      backupDataAll = _copyList(allDataIndexes);
+      _allItemCount = allDataIndexes.length;
+      dataSet2.forEach((row) => {activeDataIndexes.add(j++)});
       dataActive = dataSet2;
+      _activeItemCount = activeDataIndexes.length;
     });
+    //print(activeDataIndexes);
     print("data set");
     await dbHelper.autoUpdateActivity();
   }
@@ -591,6 +758,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final allRows = await dbHelper.queryAllRows();
     print('query all rows:');
     allRows.forEach((row) => dbHelper.delete(row['_id']));
+  }
+
+  _removeSelected(int x) async {
+    print("xx x = " + x.toString());
+    await dbHelper.delete(x);
   }
 
   String convertDateToString(String dde) {
@@ -686,5 +858,13 @@ class _HomeScreenState extends State<HomeScreen> {
       //print("month : " + month);
       return '$dateS, ${parsedDate.day} $month ${tm.year}';
     }
+  }
+
+  _copyList(List x) {
+    List<int> r = [];
+    for (int i = 0; i < x.length; i++) {
+      r.add(x[i]);
+    }
+    return r;
   }
 }

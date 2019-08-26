@@ -135,15 +135,18 @@ class _InsertInterfaceState extends State<InsertInterface> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   int _error = 0;
   int _loading = 0;
+  int hoursDelay = 0;
   bool prefsDaily = false;
   bool sound = false;
   bool vibrate = false;
   String _errorMsg = "";
+  List<int> items = [1, 2, 3, 5, 10];
   SharedPreferences prefs;
   @override
   void initState() {
     _initDataDaily();
     _initDataSound();
+    _initHoursDelay();
     _initDatavibrate();
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var initializationSettingsAndroid =
@@ -581,7 +584,7 @@ class _InsertInterfaceState extends State<InsertInterface> {
     return true;
   }
 
-  Future<void> _checkPendingNotificationRequests() async {
+  /*Future<void> _checkPendingNotificationRequests() async {
     var pendingNotificationRequests =
         await flutterLocalNotificationsPlugin.pendingNotificationRequests();
     for (var pendingNotificationRequest in pendingNotificationRequests) {
@@ -605,7 +608,7 @@ class _InsertInterfaceState extends State<InsertInterface> {
         );
       },
     );
-  }
+  }*/
 
   void _insert() async {
     if (_test()) {
@@ -698,8 +701,12 @@ class _InsertInterfaceState extends State<InsertInterface> {
 
   Future<void> _scheduleNotification(DateTime _date, int _id) async {
     var scheduledNotificationDateTime;
-    if (DateTime.now().subtract(Duration(hours: 3)).compareTo(_date) < 0) {
-      scheduledNotificationDateTime = _date.subtract(Duration(hours: 2));
+    if (DateTime.now()
+            .subtract(Duration(hours: items[hoursDelay] + 1))
+            .compareTo(_date) <
+        0) {
+      scheduledNotificationDateTime =
+          _date.subtract(Duration(hours: items[hoursDelay]));
     } else {
       scheduledNotificationDateTime = _date.subtract(Duration(hours: 0));
     }
@@ -814,6 +821,18 @@ class _InsertInterfaceState extends State<InsertInterface> {
     } else {
       await prefs.setBool("vibrate", false);
       vibrate = prefs.getBool("vibrate");
+    }
+  }
+
+  _initHoursDelay() async {
+    prefs = await SharedPreferences.getInstance();
+    if (prefs.getInt("delay") != null) {
+      setState(() {
+        hoursDelay = prefs.getInt("delay");
+      });
+    } else {
+      await prefs.setInt("delay", 0);
+      hoursDelay = 0;
     }
   }
 

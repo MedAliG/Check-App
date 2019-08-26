@@ -9,6 +9,7 @@ import 'screens/insertScreen.dart';
 import 'screens/sqtest.dart';
 import 'screens/settingsInterface.dart';
 import 'screens/guideline.dart';
+import 'screens/swippable.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:Check/objects/database.dart';

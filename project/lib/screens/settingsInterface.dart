@@ -15,11 +15,15 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
   bool daily = false;
   bool vibrate = false;
   int _state = 0;
+  int index = 0;
+  String dropdownValue = '1 Hour';
+  List<String> items = ['1 Hour', '2 Hour', '3 Hours', '5 Hours', '10 Hours'];
   @override
   void initState() {
     _initDataDaily();
     _initDataSound();
     _initDatavibrate();
+    _initDelay();
     super.initState();
   }
 
@@ -249,7 +253,112 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
                   ),
                 ),
                 Container(
-                    margin: EdgeInsets.only(top: height * .02),
+                  margin: EdgeInsets.only(top: height * .02),
+                  width: width,
+                  padding:
+                      EdgeInsets.only(left: width * .025, right: width * .025),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        width: width * .95,
+                        padding: EdgeInsets.only(
+                            top: height * .025,
+                            bottom: height * .025,
+                            left: width * .025,
+                            right: width * .025),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(color: Colors.black38, blurRadius: 3),
+                            ],
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              child: Text(
+                                "Reminder Settings",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontFamily: "RoboBold"),
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * .01,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  bottom: height * .01, left: width * .025),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                      child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        height: height * .035,
+                                        width: height * .035,
+                                        child: Image(
+                                          image: AssetImage("assets/clock.png"),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: width * .02,
+                                      ),
+                                      Text(
+                                        "Non daily reminder timer",
+                                        style: TextStyle(fontFamily: "Robo"),
+                                      ),
+                                    ],
+                                  )),
+                                  Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      borderRadius: BorderRadius.circular(5),
+                                      border:
+                                          Border.all(color: Colors.transparent),
+                                    ),
+                                    child: DropdownButton<String>(
+                                      underline: DropdownButtonHideUnderline(
+                                        child: Container(),
+                                      ),
+                                      value: items[index],
+                                      onChanged: (String newValue) {
+                                        _setDelay(items.indexOf(newValue));
+                                        print(items.indexOf(newValue));
+                                        setState(() {
+                                          index = items.indexOf(newValue);
+                                          dropdownValue = newValue;
+                                        });
+                                      },
+                                      items: items
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                    margin: EdgeInsets.only(
+                        top: height * .02, bottom: height * .05),
                     width: width,
                     padding: EdgeInsets.only(
                         left: width * .025, right: width * .025),
@@ -343,7 +452,7 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
                                           width: width * .02,
                                         ),
                                         Text(
-                                          "App. reset",
+                                          "Data reset",
                                           style: TextStyle(fontFamily: "Robo"),
                                         ),
                                       ],
@@ -406,7 +515,7 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
                             height: height * .05,
                             width: width * .3,
                             decoration: BoxDecoration(
-                                color: Colors.green,
+                                color: Colors.blueAccent[200],
                                 borderRadius: BorderRadius.circular(15),
                                 boxShadow: [
                                   BoxShadow(
@@ -431,7 +540,7 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
                             height: height * .05,
                             width: width * .3,
                             decoration: BoxDecoration(
-                                color: Colors.red,
+                                color: Colors.redAccent[200],
                                 borderRadius: BorderRadius.circular(15),
                                 boxShadow: [
                                   BoxShadow(
@@ -467,6 +576,29 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
     } else {
       await prefs.setBool("daily", false);
       daily = prefs.getBool("daily");
+    }
+  }
+
+  _setDelay(int x) async {
+    prefs = await SharedPreferences.getInstance();
+    await prefs.setInt("delay", x);
+    int r = await prefs.getInt("delay");
+    print(r);
+  }
+
+  _initDelay() async {
+    print("setting delay");
+    prefs = await SharedPreferences.getInstance();
+    if (prefs.getInt("delay") != null) {
+      print("/**/\n preset");
+      setState(() {
+        index = prefs.getInt("delay");
+      });
+      
+    } else {
+      print("/**/\n unset");
+      await prefs.setInt("delay", 0);
+      index = prefs.getInt("delay");
     }
   }
 
