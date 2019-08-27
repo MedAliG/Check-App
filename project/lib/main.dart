@@ -92,7 +92,7 @@ class _InternShipState extends State<InternShip> {
       routes: <String, WidgetBuilder>{
         '/notification': (BuildContext context) => NotificationSystem(),
         '/str': (BuildContext context) => LocalStorage(),
-        '/home': (BuildContext context) => HomeScreen(),
+        '/home': (BuildContext context) => HomeScreen(state:"active"),
         '/add': (BuildContext context) => InsertInterface(),
         '/sqt': (BuildContext context) => Sr(),
         '/settings': (BuildContext context) => SettingsInterface(),

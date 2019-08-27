@@ -339,7 +339,6 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
                                       items: items
                                           .map<DropdownMenuItem<String>>(
                                               (String value) {
-
                                         return DropdownMenuItem<String>(
                                           value: value,
                                           child: Text(value),
@@ -594,7 +593,6 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
       setState(() {
         index = prefs.getInt("delay");
       });
-      
     } else {
       print("/**/\n unset");
       await prefs.setInt("delay", 0);

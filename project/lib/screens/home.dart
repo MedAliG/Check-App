@@ -5,22 +5,29 @@ import 'package:Check/screens/singleItem.dart';
 import 'package:Check/objects/database.dart';
 
 class HomeScreen extends StatefulWidget {
-  _HomeScreenState createState() => _HomeScreenState();
+  final String state;
+  HomeScreen({Key key, this.state}) : super(key: key);
+  _HomeScreenState createState() => _HomeScreenState(state);
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   final dbHelper = DatabaseHelper.instance;
+  String state;
   int _allItemCount = 0;
   int _activeItemCount = 0;
-  String _state = "active";
+  String _state;
   int _deleteState = 0;
   int confirmDelete = 0;
   int deletable = -1;
   List<int> allDataIndexes = [];
   List<int> activeDataIndexes = [];
   List<int> backupDataAll = [];
+  List<int> backupDataActive = [];
   List<Map<String, dynamic>> dataAll = [];
   List<Map<String, dynamic>> dataActive = [];
+  String _deleteMsg = "";
+  _HomeScreenState(this.state);
+
   @override
   void initState() {
     //_emptyAll();
@@ -486,7 +493,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
-      width: width * .7,
+      width: width * .8,
       padding: EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(20)),
@@ -494,7 +501,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: <Widget>[
           Container(
               child: Text(
-            "Are you sure you want to delete this item ?",
+            _deleteMsg,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 18),
           )),
@@ -519,7 +526,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(
                             fontFamily: "RoboBold",
                             color: Colors.white,
-                            fontSize: width * .05),
+                            fontSize: width * .035),
                       ),
                     ),
                   ),
@@ -540,7 +547,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(
                             fontFamily: "RoboBold",
                             color: Colors.white,
-                            fontSize: width * .05),
+                            fontSize: width * .035),
                       ),
                     ),
                   ),
@@ -554,15 +561,29 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _deleteConfirm() {
-    setState(() {
-      print("stuff");
-      confirmDelete = 1;
-      _deleteState = 0;
-      print("deletable" + deletable.toString());
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil("/home", (Route<dynamic> route) => false);
-    });
-    _removeSelected(deletable);
+    if (_state != "active") {
+      setState(() {
+        confirmDelete = 1;
+        _deleteState = 0;
+        print("deletable" + deletable.toString());
+        _removeSelected(deletable);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen(state: "all")),
+        );
+      });
+    } else {
+      setState(() {
+        confirmDelete = 1;
+        _deleteState = 0;
+        print("deletable" + deletable.toString());
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen(state: "active")),
+        );
+      });
+      _changeState(deletable);
+    }
   }
 
   _cancelBtn() {
@@ -572,9 +593,13 @@ class _HomeScreenState extends State<HomeScreen> {
       print(backupDataAll);
       //allDataIndexes = [];
       allDataIndexes = _copyList(backupDataAll);
-
+      activeDataIndexes = _copyList(backupDataActive);
       confirmDelete = 0;
-      _allItemCount++;
+      if (_state == "active") {
+        _activeItemCount++;
+      } else {
+        _allItemCount++;
+      }
     });
   }
 
@@ -589,33 +614,26 @@ class _HomeScreenState extends State<HomeScreen> {
     return Dismissible(
       key: Key(UniqueKey().toString()),
       onDismissed: (direction) {
-        print(x);
         //backupDataAll = allDataIndexes;
         if (all) {
+          print("deletable");
           setState(() {
+            _deleteMsg = "Are you sure you want to delete this item ?";
             _deleteState = 1;
             deletable = dataAll[x]["_id"];
             print("deletable :" + deletable.toString());
             allDataIndexes.removeAt(x);
             _allItemCount = allDataIndexes.length;
-
-            //print("removing " + x.toString());
-            //print(dataAll.length);
-            /*for (int i = 0; i < dataAll.length; i++) {
-              print("index : " + i.toString());
-              print(dataAll[i]);
-            }*/
-            //dataAll.removeAt(x);
-
-            //dataAll.removeAt(x);
-            //print("\n after that shit" + dataAll.length.toString());
           });
         } else {
-          /*setState(() {
-            dataActive.removeAt(x);
-            dataAll.removeAt(x);
-            print("removed " + x.toString());
-          });*/
+          setState(() {
+            _deleteMsg = "Are you sure you want to set this as payed ?";
+            _deleteState = 1;
+            deletable = dataActive[x]["_id"];
+            print("deletable :" + deletable.toString());
+            activeDataIndexes.removeAt(x);
+            _activeItemCount = activeDataIndexes.length;
+          });
         }
       },
       child: GestureDetector(
@@ -729,15 +747,17 @@ class _HomeScreenState extends State<HomeScreen> {
     int i = 0;
     int j = 0;
     setState(() {
+      _state = state;
       dataSet.forEach((row) => {allDataIndexes.add(i++)});
       dataAll = dataSet;
       backupDataAll = _copyList(allDataIndexes);
       _allItemCount = allDataIndexes.length;
+
       dataSet2.forEach((row) => {activeDataIndexes.add(j++)});
       dataActive = dataSet2;
+      backupDataActive = _copyList(activeDataIndexes);
       _activeItemCount = activeDataIndexes.length;
     });
-    //print(activeDataIndexes);
     print("data set");
     await dbHelper.autoUpdateActivity();
   }
@@ -763,6 +783,10 @@ class _HomeScreenState extends State<HomeScreen> {
   _removeSelected(int x) async {
     print("xx x = " + x.toString());
     await dbHelper.delete(x);
+  }
+
+  _changeState(int x) async {
+    await dbHelper.changeState(x);
   }
 
   String convertDateToString(String dde) {
