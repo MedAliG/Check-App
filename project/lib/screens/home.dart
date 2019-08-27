@@ -1,4 +1,6 @@
 import 'dart:core';
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:Check/widgets/bottomNavBarC.dart';
 import 'package:Check/screens/singleItem.dart';
@@ -27,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Map<String, dynamic>> dataActive = [];
   String _deleteMsg = "";
   _HomeScreenState(this.state);
-
+  bool isPausedAnimation = false;
   @override
   void initState() {
     //_emptyAll();
@@ -603,6 +605,22 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  _dismissbleBg() {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return Container(
+      width: width,
+      alignment: Alignment.centerLeft,
+      child: Container(
+        width: width * .3,
+        child: FlareActor(
+          "assets/flare/Loading.flr",
+          animation: 'Loading',
+        ),
+      ),
+    );
+  }
+
   _itemCreate2(int x, Map data, bool all) {
     List<String> images = [
       "assets/pic2.png",
@@ -612,6 +630,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Dismissible(
+      background: _dismissbleBg(),
       key: Key(UniqueKey().toString()),
       onDismissed: (direction) {
         //backupDataAll = allDataIndexes;
@@ -646,6 +665,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
         child: Container(
+          //padding: EdgeInsets.only(top: height * .02, bottom: height * .02),
           margin: EdgeInsets.only(
               top: height * .015,
               bottom: height * .015,

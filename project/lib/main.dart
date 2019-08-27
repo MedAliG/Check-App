@@ -9,7 +9,7 @@ import 'screens/insertScreen.dart';
 import 'screens/sqtest.dart';
 import 'screens/settingsInterface.dart';
 import 'screens/guideline.dart';
-import 'screens/swippable.dart';
+import 'screens/login.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:Check/objects/database.dart';
@@ -90,9 +90,10 @@ class _InternShipState extends State<InternShip> {
     return MaterialApp(
       title: 'Navigation',
       routes: <String, WidgetBuilder>{
+        '/login': (BuildContext context) => LoginScreen(),
         '/notification': (BuildContext context) => NotificationSystem(),
         '/str': (BuildContext context) => LocalStorage(),
-        '/home': (BuildContext context) => HomeScreen(state:"active"),
+        '/home': (BuildContext context) => HomeScreen(state: "active"),
         '/add': (BuildContext context) => InsertInterface(),
         '/sqt': (BuildContext context) => Sr(),
         '/settings': (BuildContext context) => SettingsInterface(),

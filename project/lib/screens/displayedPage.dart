@@ -238,7 +238,7 @@ class _SecondScreenState extends State<SecondScreen> {
         padding: EdgeInsets.all(20),
         child: Center(
           child: FlareActor(
-            "assets/flare/check_screen.flr",
+            "assets/flare/check.flr",
             animation: "Untitled",
             fit: BoxFit.contain,
           ),
