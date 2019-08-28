@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:Check/widgets/bottomNavBarC.dart';
 import 'package:Check/screens/singleItem.dart';
 import 'package:Check/objects/database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   final String state;
@@ -14,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final dbHelper = DatabaseHelper.instance;
+  SharedPreferences prefs;
   String state;
   int _allItemCount = 0;
   int _activeItemCount = 0;
@@ -21,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _deleteState = 0;
   int confirmDelete = 0;
   int deletable = -1;
+  bool dismissble = false;
   List<int> allDataIndexes = [];
   List<int> activeDataIndexes = [];
   List<int> backupDataAll = [];
@@ -33,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     //_emptyAll();
-
+    _setDismissble();
     _initData();
     _itemCount();
 
@@ -168,14 +171,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemCount: _activeItemCount,
                           itemBuilder: (BuildContext context, int index) {
                             print("\n/****/ supp" + dataAll.length.toString());
-                            return _itemCreate2(index,
-                                dataActive[activeDataIndexes[index]], false);
+                            return (dismissble)
+                                ? _itemCreate2(index,
+                                    dataActive[activeDataIndexes[index]], false)
+                                : _itemCreateDefault(
+                                    index,
+                                    dataActive[activeDataIndexes[index]],
+                                    false);
                           })
                       : ListView.builder(
                           itemCount: _allItemCount,
                           itemBuilder: (BuildContext context, int index) {
-                            return _itemCreate2(
-                                index, dataAll[allDataIndexes[index]], true);
+                            return (dismissble)
+                                ? _itemCreate2(
+                                    index, dataAll[allDataIndexes[index]], true)
+                                : _itemCreateDefault(index,
+                                    dataAll[allDataIndexes[index]], false);
                           }),
                 )
               ],
@@ -608,8 +619,10 @@ class _HomeScreenState extends State<HomeScreen> {
   _dismissbleBg() {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
     return Container(
       width: width,
+      color: Colors.transparent,
       alignment: Alignment.centerLeft,
       child: Container(
         width: width * .3,
@@ -621,6 +634,120 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  //Non dismissble ItemList
+  _itemCreateDefault(int x, Map data, bool all) {
+    List<String> images = [
+      "assets/pic2.png",
+      "assets/pic3.png",
+      "assets/pic1.png",
+    ];
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  SingleItem(x: x, data: data, image: images[x % 3])),
+        );
+      },
+      child: Container(
+        //padding: EdgeInsets.only(top: height * .02, bottom: height * .02),
+        margin: EdgeInsets.only(
+            top: height * .015,
+            bottom: height * .015,
+            right: width * .01,
+            left: width * .01),
+        height: height * .2,
+        width: width * .88,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(35),
+            boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 4)]),
+        child: Stack(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  width: width * .38,
+                  height: height * .2,
+                ),
+                Hero(
+                  tag: "item" + x.toString(),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Container(
+                      height: height * .2,
+                      width: width * .5,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(images[x % 3]))),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Container(
+              height: height * .2,
+              width: width * .88,
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    height: height * .2,
+                    width: width * .55,
+                    //padding: EdgeInsets.only(top: height * .03, left: width * .1),
+                    //color: Colors.red,
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.only(
+                              top: height * .04, left: width * .1),
+                          height: height * .09,
+                          width: width * .55,
+                          child: Text(
+                            data["amount"].toString() + " DT",
+                            style:
+                                TextStyle(fontFamily: "RoboBold", fontSize: 25),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: width * .1),
+                          height: height * .035,
+                          width: width * .55,
+                          child: Text(
+                            data["name"],
+                            style: TextStyle(
+                                fontFamily: 'Grenze',
+                                fontSize: 18,
+                                color: Colors.black54),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: width * .1),
+                          height: height * .03,
+                          width: width * .55,
+                          child: Text(
+                            convertDateToString(data['deliverDate']),
+                            style: TextStyle(
+                                fontFamily: 'Grenze',
+                                fontSize: 18,
+                                color: Colors.black54),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //Dismissble Item list
   _itemCreate2(int x, Map data, bool all) {
     List<String> images = [
       "assets/pic2.png",
@@ -631,6 +758,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double width = MediaQuery.of(context).size.width;
     return Dismissible(
       background: _dismissbleBg(),
+      direction: DismissDirection.horizontal,
       key: Key(UniqueKey().toString()),
       onDismissed: (direction) {
         //backupDataAll = allDataIndexes;
@@ -807,6 +935,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _changeState(int x) async {
     await dbHelper.changeState(x);
+  }
+
+  _setDismissble() async {
+    prefs = prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool("dismissble") != null) {
+      setState(() {
+        dismissble = prefs.getBool("dismissble");
+      });
+    } else {
+      await prefs.setBool("dismissble", false);
+      dismissble = prefs.getBool("dismissble");
+    }
   }
 
   String convertDateToString(String dde) {

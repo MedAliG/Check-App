@@ -14,12 +14,14 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
   bool sound = false;
   bool daily = false;
   bool vibrate = false;
+  bool dismissble = false;
   int _state = 0;
   int index = 0;
   String dropdownValue = '1 Hour';
   List<String> items = ['1 Hour', '2 Hour', '3 Hours', '5 Hours', '10 Hours'];
   @override
   void initState() {
+    _initDismissble();
     _initDataDaily();
     _initDataSound();
     _initDatavibrate();
@@ -345,10 +347,52 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
                                         );
                                       }).toList(),
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  bottom: height * .01, left: width * .025),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                      child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        height: height * .035,
+                                        width: height * .035,
+                                        child: Image(
+                                          image: AssetImage("assets/diss.png"),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: width * .02,
+                                      ),
+                                      Text(
+                                        "Dismissble activities",
+                                        style: TextStyle(fontFamily: "Robo"),
+                                      ),
+                                    ],
+                                  )),
+                                  Container(
+                                    child: Switch(
+                                      value: dismissble,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          dismissble = value;
+                                          prefs.setBool(
+                                              "dismissble", dismissble);
+                                        });
+                                      },
+                                      activeColor: Colors.green,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
                           ],
                         ),
                       )
@@ -621,6 +665,18 @@ class _SettingsInterfaceState extends State<SettingsInterface> {
     } else {
       await prefs.setBool("sound", false);
       sound = prefs.getBool("sound");
+    }
+  }
+
+  _initDismissble() async {
+    prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool("dismissble") != null) {
+      setState(() {
+        dismissble = prefs.getBool("dismissble");
+      });
+    } else {
+      await prefs.setBool("dismissble", false);
+      dismissble = prefs.getBool("dismissble");
     }
   }
 
