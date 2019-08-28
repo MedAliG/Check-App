@@ -267,13 +267,14 @@ class _SecondScreenState extends State<SecondScreen> {
   }
 
   _changeState() {
+    dbHelper.changeState(id);
     setState(() {
       animation = 1;
       Timer(Duration(seconds: 2), () {
-        Navigator.of(context).pushNamed("/home");
+        //Navigator.of(context).pushNamed("/home");
+        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
       });
     });
-    dbHelper.changeState(id);
   }
 
   String convertDateToString(String dde) {

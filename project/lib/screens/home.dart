@@ -660,7 +660,7 @@ class _HomeScreenState extends State<HomeScreen> {
             right: width * .01,
             left: width * .01),
         height: height * .2,
-        
+
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(35),
@@ -800,7 +800,7 @@ class _HomeScreenState extends State<HomeScreen> {
               right: width * .01,
               left: width * .01),
           height: height * .2,
-          
+
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(35),

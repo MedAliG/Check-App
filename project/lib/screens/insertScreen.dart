@@ -150,7 +150,7 @@ class _InsertInterfaceState extends State<InsertInterface> {
     _initDatavibrate();
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+        AndroidInitializationSettings('@mipmap/launcher_icon');
     var initializationSettingsIOS = IOSInitializationSettings(
         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
     var initializationSettings = InitializationSettings(
@@ -726,7 +726,7 @@ class _InsertInterfaceState extends State<InsertInterface> {
         name.text, amount.text, _date.toIso8601String(),
         icon: 'secondary_icon',
         sound: 'slow_spring_board',
-        largeIcon: 'sample_large_icon',
+        largeIcon: '@mipmap/launcher_icon',
         largeIconBitmapSource: BitmapSource.Drawable,
         vibrationPattern: vibrationPattern,
         enableLights: true,
