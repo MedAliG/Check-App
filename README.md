@@ -2,7 +2,7 @@
 
 [![pub package](https://img.shields.io/pub/v/flutter_local_notifications.svg)](https://pub.dartlang.org/packages/flutter_local_notifications)
 [![Build Status](https://api.cirrus-ci.com/github/MaikuB/flutter_local_notifications.svg)](https://cirrus-ci.com/github/MaikuB/flutter_local_notifications/master)
-
+[![Codemagic build status](https://api.codemagic.io/apps/5d679aeb589eba1ae9a6a273/5d679aeb589eba1ae9a6a272/status_badge.svg)](https://codemagic.io/apps/5d679aeb589eba1ae9a6a273/5d679aeb589eba1ae9a6a272/latest_build)
 A cross platform plugin for displaying local notifications. 
 
 ## Supported Platforms
